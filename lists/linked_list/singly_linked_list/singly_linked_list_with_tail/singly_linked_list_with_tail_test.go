@@ -76,26 +76,14 @@ func TestAppend(t *testing.T) {
 		got := lastItem.item
 		want := randomFloat
 		utils.ValidateResult(t, got, want)
-
-		// nthLinkedListItem := c.linkedlist.head
-		// var got, want interface{}
-		//
-		// for i := 0; i < len(items); i++ {
-		// 	got = nthLinkedListItem.item
-		// 	want = items[c.itemsLastIndex-i]
-		// 	utils.ValidateResult(t, got, want)
-		// 	nthLinkedListItem = nthLinkedListItem.prev
-		// }
-		//
-		// if nthLinkedListItem != nil {
-		// 	t.Errorf("Expected nthLinkedListItem to be nil but got %v", nthLinkedListItem)
-		// }
-		//
 	}))
 
-	// t.Run("Tail points to the item added first by Prepend", testCase(func(t *testing.T, c *testContext) {
-	// 	got := c.linkedList.tail.item
-	// 	want := items[0]
-	// 	utils.ValidateResult(t, got, want)
-	// }))
+	t.Run("Tail points to the item added last by Append", testCase(func(t *testing.T, c *testContext) {
+		randomFloat := 0.5
+		c.linkedList.Append(randomFloat)
+
+		got := c.linkedList.tail.item
+		want := randomFloat
+		utils.ValidateResult(t, got, want)
+	}))
 }
