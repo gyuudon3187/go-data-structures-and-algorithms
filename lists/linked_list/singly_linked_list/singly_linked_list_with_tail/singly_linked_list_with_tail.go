@@ -54,6 +54,10 @@ func (l *linkedList) RemoveTail() interface{} {
 	return removed
 }
 
+func (l *linkedList) Find(item interface{}) *linkedListItem {
+	return nil
+}
+
 func (l *linkedList) addFirstItem(item interface{}) {
 	l.head = &linkedListItem{item: item}
 	l.tail = l.head

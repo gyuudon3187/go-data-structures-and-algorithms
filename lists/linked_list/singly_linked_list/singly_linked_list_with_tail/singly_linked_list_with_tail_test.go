@@ -1,9 +1,10 @@
 package linkedlistwithtail
 
 import (
-	"testing"
-
+	"github.com/google/go-cmp/cmp"
 	utils "github.com/gyuudon3187/go-data-structures-and-algorithms/test_utils"
+	// "slices"
+	"testing"
 )
 
 var items = []interface{}{1, "string", 0.4}
@@ -129,5 +130,29 @@ func TestRemoveTail(t *testing.T) {
 		got := c.linkedList.tail.item
 		want := items[1]
 		utils.ValidateResult(t, got, want)
+	}))
+}
+
+func TestFind(t *testing.T) {
+	t.Run("Returns the sought item", testCase(func(t *testing.T, c *testContext) {
+		got := c.linkedList.Find(items[1])
+		want := items[1]
+		utils.ValidateResult(t, got, want)
+	}))
+
+	t.Run("Is idempotent", testCase(func(t *testing.T, c *testContext) {
+		c.linkedList.Find(items[1])
+
+		var itemsAfterFind []interface{} = make([]interface{}, 0, len(items))
+		current := c.linkedList.head
+
+		for current != nil {
+			itemsAfterFind = append([]interface{}{current.item}, itemsAfterFind...)
+			current = current.prev
+		}
+
+		if !cmp.Equal(items, itemsAfterFind) {
+			t.Errorf("Expected 'items' and 'itemsAfterFind' to be equal but they were not. items: %v, itemsAfterFind: %v", items, itemsAfterFind)
+		}
 	}))
 }
