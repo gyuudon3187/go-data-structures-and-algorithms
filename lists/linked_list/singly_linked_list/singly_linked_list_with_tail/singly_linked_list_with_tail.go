@@ -28,17 +28,34 @@ func (l *linkedList) Append(item interface{}) {
 }
 
 func (l *linkedList) RemoveHead() interface{} {
-	if l.head != nil {
-		removedHead := l.head.item
-		l.head = l.head.prev
-		return removedHead
+	if l.head == nil {
+		return nil
 	}
 
-	return nil
+	removed := l.head.item
+	l.head = l.head.prev
+	return removed
 }
 
 func (l *linkedList) RemoveTail() interface{} {
-	return nil
+	if l.head == nil {
+		return nil
+	}
+
+	nextAfterTail := l.head
+
+	for nextAfterTail.prev != l.tail {
+		nextAfterTail = nextAfterTail.prev
+	}
+
+	nextAfterTail.prev = nil
+	removed := l.tail.item
+	l.tail = nextAfterTail
+	return removed
+}
+
+func (l *linkedList) removeHeadOrTailNode(headOrTail *linkedListItem) {
+
 }
 
 func (l *linkedList) addFirstItem(item interface{}) {
