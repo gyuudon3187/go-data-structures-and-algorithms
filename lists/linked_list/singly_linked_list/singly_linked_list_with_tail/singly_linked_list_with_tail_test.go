@@ -6,7 +6,7 @@ import (
 	utils "github.com/gyuudon3187/go-data-structures-and-algorithms/test_utils"
 )
 
-var items = []interface{}{1, "string"}
+var items = []interface{}{1, "string", 0.4}
 
 type TestContext interface {
 	beforeEach()
