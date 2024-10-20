@@ -8,6 +8,11 @@ type node struct {
 type linkedList struct {
 	head *node
 	tail *node
+	len  int
+}
+
+func (l *linkedList) Length() int {
+	return l.len
 }
 
 func (l *linkedList) Prepend(item interface{}) {
@@ -16,6 +21,8 @@ func (l *linkedList) Prepend(item interface{}) {
 	} else {
 		l.head = &node{item: item, prev: l.head}
 	}
+
+	l.len++
 }
 
 func (l *linkedList) Append(item interface{}) {
@@ -25,6 +32,8 @@ func (l *linkedList) Append(item interface{}) {
 		l.tail.prev = &node{item: item, prev: nil}
 		l.tail = l.tail.prev
 	}
+
+	l.len++
 }
 
 func (l *linkedList) RemoveHead() interface{} {
@@ -34,6 +43,7 @@ func (l *linkedList) RemoveHead() interface{} {
 
 	removed := l.head.item
 	l.head = l.head.prev
+	l.len--
 	return removed
 }
 
@@ -51,6 +61,7 @@ func (l *linkedList) RemoveTail() interface{} {
 	nextAfterTail.prev = nil
 	removed := l.tail.item
 	l.tail = nextAfterTail
+	l.len--
 	return removed
 }
 

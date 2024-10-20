@@ -49,13 +49,13 @@ func TestMain(m *testing.M) {
 }
 
 func TestPrepend(t *testing.T) {
-	t.Run("Prepends items", testCase(func(t *testing.T, c *testContext) {
-		nthLinkedListItem := c.linkedList.head
+	t.Run("Prepends items", testCase(func(t *testing.T, tc *testContext) {
+		nthLinkedListItem := tc.linkedList.head
 		var got, want interface{}
 
 		for i := 0; i < len(items); i++ {
 			got = nthLinkedListItem.item
-			want = items[c.itemsLastIndex-i]
+			want = items[tc.itemsLastIndex-i]
 			utils.ValidateResult(t, got, want)
 			nthLinkedListItem = nthLinkedListItem.prev
 		}
@@ -65,18 +65,24 @@ func TestPrepend(t *testing.T) {
 		}
 	}))
 
-	t.Run("Tail points to the prepended item", testCase(func(t *testing.T, c *testContext) {
-		got := c.linkedList.tail.item
+	t.Run("Tail points to the prepended item", testCase(func(t *testing.T, tc *testContext) {
+		got := tc.linkedList.tail.item
 		want := items[0]
+		utils.ValidateResult(t, got, want)
+	}))
+
+	t.Run("Increments length", testCase(func(t *testing.T, tc *testContext) {
+		got := tc.linkedList.Length()
+		want := len(items)
 		utils.ValidateResult(t, got, want)
 	}))
 }
 
 func TestAppend(t *testing.T) {
-	t.Run("Appends items", testCase(func(t *testing.T, c *testContext) {
+	t.Run("Appends items", testCase(func(t *testing.T, tc *testContext) {
 		randomFloat := 0.5
-		c.linkedList.Append(randomFloat)
-		current := c.linkedList.head
+		tc.linkedList.Append(randomFloat)
+		current := tc.linkedList.head
 		var lastItem *node
 
 		for current != nil {
@@ -89,63 +95,84 @@ func TestAppend(t *testing.T) {
 		utils.ValidateResult(t, got, want)
 	}))
 
-	t.Run("Tail points to the appended item", testCase(func(t *testing.T, c *testContext) {
+	t.Run("Tail points to the appended item", testCase(func(t *testing.T, tc *testContext) {
 		randomFloat := 0.5
-		c.linkedList.Append(randomFloat)
+		tc.linkedList.Append(randomFloat)
 
-		got := c.linkedList.tail.item
+		got := tc.linkedList.tail.item
 		want := randomFloat
+		utils.ValidateResult(t, got, want)
+	}))
+
+	t.Run("Increments length", testCase(func(t *testing.T, tc *testContext) {
+		tc.linkedList.Append("random string")
+		got := tc.linkedList.Length()
+		want := len(items) + 1
 		utils.ValidateResult(t, got, want)
 	}))
 }
 
 func TestRemoveHead(t *testing.T) {
-	t.Run("Returns the head", testCase(func(t *testing.T, c *testContext) {
-		got := c.linkedList.RemoveHead()
-		want := items[c.itemsLastIndex]
+	t.Run("Returns the head", testCase(func(t *testing.T, tc *testContext) {
+		got := tc.linkedList.RemoveHead()
+		want := items[tc.itemsLastIndex]
 		utils.ValidateResult(t, got, want)
 	}))
 
-	t.Run("Sets the head to its 'prev' pointer", testCase(func(t *testing.T, c *testContext) {
-		want := c.linkedList.head.prev
-		c.linkedList.RemoveHead()
-		got := c.linkedList.head
+	t.Run("Sets the head to its 'prev' pointer", testCase(func(t *testing.T, tc *testContext) {
+		want := tc.linkedList.head.prev
+		tc.linkedList.RemoveHead()
+		got := tc.linkedList.head
+		utils.ValidateResult(t, got, want)
+	}))
+
+	t.Run("Decrements length", testCase(func(t *testing.T, tc *testContext) {
+		tc.linkedList.RemoveHead()
+		got := tc.linkedList.Length()
+		want := len(items) - 1
 		utils.ValidateResult(t, got, want)
 	}))
 }
 
 func TestRemoveTail(t *testing.T) {
-	t.Run("Returns the tail", testCase(func(t *testing.T, c *testContext) {
-		got := c.linkedList.RemoveTail()
+	t.Run("Returns the tail", testCase(func(t *testing.T, tc *testContext) {
+		got := tc.linkedList.RemoveTail()
 		want := items[0]
 		utils.ValidateResult(t, got, want)
 	}))
 
-	t.Run("Sets the 'prev' pointer of the item next to tail to nil", testCase(func(t *testing.T, c *testContext) {
-		nextAfterTail := c.linkedList.head
+	t.Run("Sets the 'prev' pointer of the item next to tail to nil", testCase(func(t *testing.T, tc *testContext) {
+		nextAfterTail := tc.linkedList.head
 
-		for nextAfterTail.prev != c.linkedList.tail {
+		for nextAfterTail.prev != tc.linkedList.tail {
 			nextAfterTail = nextAfterTail.prev
 		}
 
-		c.linkedList.RemoveTail()
+		tc.linkedList.RemoveTail()
 
 		got := nextAfterTail.prev
 		var want *node = nil
 		utils.ValidateResult(t, got, want)
 	}))
 
-	t.Run("Sets the tail to the item next to old tail", testCase(func(t *testing.T, c *testContext) {
-		c.linkedList.RemoveTail()
-		got := c.linkedList.tail.item
+	t.Run("Sets the tail to the item next to old tail", testCase(func(t *testing.T, tc *testContext) {
+		tc.linkedList.RemoveTail()
+		got := tc.linkedList.tail.item
 		want := items[1]
+		utils.ValidateResult(t, got, want)
+	}))
+
+	t.Run("Decrements length", testCase(func(t *testing.T, tc *testContext) {
+		tc.linkedList.RemoveTail()
+		got := tc.linkedList.Length()
+		want := len(items) - 1
 		utils.ValidateResult(t, got, want)
 	}))
 }
 
 func TestFind(t *testing.T) {
-	t.Run("Returns the sought node", testCase(func(t *testing.T, c *testContext) {
-		soughtNode := c.linkedList.Find(items[1])
+	t.Run("Returns the sought node", testCase(func(t *testing.T, tc *testContext) {
+		soughtNode := tc.linkedList.Find(items[1])
 		var got interface{}
 
 		if soughtNode != nil {
@@ -156,11 +183,11 @@ func TestFind(t *testing.T) {
 		utils.ValidateResult(t, got, want)
 	}))
 
-	t.Run("Is idempotent", testCase(func(t *testing.T, c *testContext) {
-		c.linkedList.Find(items[1])
+	t.Run("Is idempotent", testCase(func(t *testing.T, tc *testContext) {
+		tc.linkedList.Find(items[1])
 
 		var itemsAfterFind []interface{} = make([]interface{}, 0, len(items))
-		current := c.linkedList.head
+		current := tc.linkedList.head
 
 		for current != nil {
 			itemsAfterFind = append([]interface{}{current.item}, itemsAfterFind...)
