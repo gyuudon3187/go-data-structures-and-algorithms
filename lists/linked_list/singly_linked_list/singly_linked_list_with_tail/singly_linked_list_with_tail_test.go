@@ -1,8 +1,9 @@
 package linkedlistwithtail
 
 import (
-	utils "github.com/gyuudon3187/go-data-structures-and-algorithms/test_utils"
 	"testing"
+
+	utils "github.com/gyuudon3187/go-data-structures-and-algorithms/test_utils"
 )
 
 var items = []interface{}{1, "string"}
@@ -96,9 +97,30 @@ func TestRemoveHead(t *testing.T) {
 }
 
 func TestRemoveTail(t *testing.T) {
-	t.Run("Removes the tail", testCase(func(t *testing.T, c *testContext) {
+	t.Run("Returns the tail", testCase(func(t *testing.T, c *testContext) {
 		got := c.linkedList.RemoveTail()
 		want := items[0]
+		utils.ValidateResult(t, got, want)
+	}))
+
+	t.Run("Sets the prev 'pointer' of the item next to tail to nil", testCase(func(t *testing.T, c *testContext) {
+		nextAfterTail := c.linkedList.head
+
+		for nextAfterTail.prev != c.linkedList.tail {
+			nextAfterTail = nextAfterTail.prev
+		}
+
+		c.linkedList.RemoveTail()
+
+		got := nextAfterTail.prev
+		var want *linkedListItem = nil
+		utils.ValidateResult(t, got, want)
+	}))
+
+	t.Run("Sets the tail to the item next to old tail", testCase(func(t *testing.T, c *testContext) {
+		c.linkedList.RemoveTail()
+		got := c.linkedList.tail.item
+		want := items[1]
 		utils.ValidateResult(t, got, want)
 	}))
 }
