@@ -94,3 +94,11 @@ func TestRemoveHead(t *testing.T) {
 		utils.ValidateResult(t, got, want)
 	}))
 }
+
+func TestRemoveTail(t *testing.T) {
+	t.Run("Removes the tail", testCase(func(t *testing.T, c *testContext) {
+		got := c.linkedList.RemoveTail()
+		want := items[0]
+		utils.ValidateResult(t, got, want)
+	}))
+}
