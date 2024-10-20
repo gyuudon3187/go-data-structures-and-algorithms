@@ -1,6 +1,7 @@
 package stack
 
 import (
+	utils "github.com/gyuudon3187/go-data-structures-and-algorithms/test_utils"
 	"testing"
 )
 
@@ -23,17 +24,11 @@ func (c *testContext) beforeEach() {
 	c.itemsLastIndex = len(items) - 1
 }
 
-func testCase(test func(t *testing.T, c *testContext)) func(*testing.T) {
+func testCase(test func(*testing.T, *testContext)) func(*testing.T) {
 	return func(t *testing.T) {
 		context := &testContext{}
 		context.beforeEach()
 		test(t, context)
-	}
-}
-
-func validateResult(t *testing.T, got, want interface{}) {
-	if got != want {
-		t.Errorf("got: %v, want: %v", got, want)
 	}
 }
 
@@ -45,7 +40,7 @@ func TestPush(t *testing.T) {
 		for i := 0; i < c.itemsLastIndex; i++ {
 			got = nthStackItem.item
 			want = items[c.itemsLastIndex-i]
-			validateResult(t, got, want)
+			utils.ValidateResult(t, got, want)
 			nthStackItem = nthStackItem.next
 		}
 	}))
@@ -58,7 +53,7 @@ func TestPop(t *testing.T) {
 		for i := 0; i < c.itemsLastIndex; i++ {
 			got = c.stack.Pop()
 			want = items[c.itemsLastIndex-i]
-			validateResult(t, got, want)
+			utils.ValidateResult(t, got, want)
 		}
 	}))
 }
@@ -72,6 +67,6 @@ func TestPeek(t *testing.T) {
 		}
 
 		want := items[c.itemsLastIndex]
-		validateResult(t, got, want)
+		utils.ValidateResult(t, got, want)
 	}))
 }

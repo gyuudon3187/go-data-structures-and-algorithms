@@ -1,6 +1,7 @@
 package queue
 
 import (
+	utils "github.com/gyuudon3187/go-data-structures-and-algorithms/test_utils"
 	"testing"
 )
 
@@ -27,17 +28,11 @@ func (c *testContext) beforeEach() {
 	c.itemsLastIndex = len(items) - 1
 }
 
-func testCase(test func(t *testing.T, c *testContext)) func(*testing.T) {
+func testCase(test func(*testing.T, *testContext)) func(*testing.T) {
 	return func(t *testing.T) {
 		context := &testContext{}
 		context.beforeEach()
 		test(t, context)
-	}
-}
-
-func validateResult(t *testing.T, got, want interface{}) {
-	if got != want {
-		t.Errorf("got: %v, want: %v", got, want)
 	}
 }
 
@@ -49,7 +44,7 @@ func TestEnqueue(t *testing.T) {
 		for i := 0; i < c.itemsLastIndex; i++ {
 			got = nthQueueItem.item
 			want = items[i]
-			validateResult(t, got, want)
+			utils.ValidateResult(t, got, want)
 			nthQueueItem = nthQueueItem.prev
 		}
 	}))
@@ -62,7 +57,7 @@ func TestDequeue(t *testing.T) {
 		for i := 0; i < c.itemsLastIndex; i++ {
 			got = c.queue.Dequeue()
 			want = items[i]
-			validateResult(t, got, want)
+			utils.ValidateResult(t, got, want)
 		}
 	}))
 }
