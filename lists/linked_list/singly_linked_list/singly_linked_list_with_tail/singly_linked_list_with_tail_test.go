@@ -12,7 +12,7 @@ type TestContext interface {
 }
 
 type testContext struct {
-	linkedlist     *linkedList
+	linkedList     *linkedList
 	itemsLastIndex int
 }
 
@@ -23,7 +23,7 @@ func (c *testContext) beforeEach() {
 		l.Prepend(item)
 	}
 
-	c.linkedlist = l
+	c.linkedList = l
 
 	c.itemsLastIndex = len(items) - 1
 }
@@ -38,7 +38,7 @@ func testCase(test func(*testing.T, *testContext)) func(*testing.T) {
 
 func TestPrepend(t *testing.T) {
 	t.Run("Prepend adds items first-in", testCase(func(t *testing.T, c *testContext) {
-		nthLinkedListItem := c.linkedlist.head
+		nthLinkedListItem := c.linkedList.head
 		var got, want interface{}
 
 		for i := 0; i < len(items); i++ {
@@ -55,8 +55,47 @@ func TestPrepend(t *testing.T) {
 	}))
 
 	t.Run("Tail points to the item added first by Prepend", testCase(func(t *testing.T, c *testContext) {
-		got := c.linkedlist.tail.item
+		got := c.linkedList.tail.item
 		want := items[0]
 		utils.ValidateResult(t, got, want)
 	}))
+}
+
+func TestAppend(t *testing.T) {
+	t.Run("Append adds items last-in", testCase(func(t *testing.T, c *testContext) {
+		randomFloat := 0.5
+		c.linkedList.Append(randomFloat)
+		current := c.linkedList.head
+		var lastItem *linkedListItem
+
+		for current != nil {
+			lastItem = current
+			current = current.prev
+		}
+
+		got := lastItem.item
+		want := randomFloat
+		utils.ValidateResult(t, got, want)
+
+		// nthLinkedListItem := c.linkedlist.head
+		// var got, want interface{}
+		//
+		// for i := 0; i < len(items); i++ {
+		// 	got = nthLinkedListItem.item
+		// 	want = items[c.itemsLastIndex-i]
+		// 	utils.ValidateResult(t, got, want)
+		// 	nthLinkedListItem = nthLinkedListItem.prev
+		// }
+		//
+		// if nthLinkedListItem != nil {
+		// 	t.Errorf("Expected nthLinkedListItem to be nil but got %v", nthLinkedListItem)
+		// }
+		//
+	}))
+
+	// t.Run("Tail points to the item added first by Prepend", testCase(func(t *testing.T, c *testContext) {
+	// 	got := c.linkedList.tail.item
+	// 	want := items[0]
+	// 	utils.ValidateResult(t, got, want)
+	// }))
 }
