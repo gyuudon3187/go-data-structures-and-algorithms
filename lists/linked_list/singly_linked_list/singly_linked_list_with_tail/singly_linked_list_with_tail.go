@@ -55,6 +55,16 @@ func (l *linkedList) RemoveTail() interface{} {
 }
 
 func (l *linkedList) Find(item interface{}) *linkedListItem {
+	current := l.head
+
+	for current != nil {
+		if current.item == item {
+			return current
+		}
+
+		current = current.prev
+	}
+
 	return nil
 }
 

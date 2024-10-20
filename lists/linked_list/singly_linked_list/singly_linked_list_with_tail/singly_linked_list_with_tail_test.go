@@ -134,8 +134,14 @@ func TestRemoveTail(t *testing.T) {
 }
 
 func TestFind(t *testing.T) {
-	t.Run("Returns the sought item", testCase(func(t *testing.T, c *testContext) {
-		got := c.linkedList.Find(items[1])
+	t.Run("Returns the sought node", testCase(func(t *testing.T, c *testContext) {
+		soughtNode := c.linkedList.Find(items[1])
+		var got interface{}
+
+		if soughtNode != nil {
+			got = soughtNode.item
+		}
+
 		want := items[1]
 		utils.ValidateResult(t, got, want)
 	}))
