@@ -2,13 +2,13 @@ package stack
 
 import "sync"
 
-type stackItem struct {
+type node struct {
 	item interface{}
-	next *stackItem
+	next *node
 }
 
 type stack struct {
-	sp *stackItem
+	sp *node
 	mu sync.Mutex
 }
 
@@ -17,7 +17,7 @@ func New() *stack {
 }
 
 func (s *stack) Push(item interface{}) {
-	s.sp = &stackItem{item, s.sp}
+	s.sp = &node{item, s.sp}
 }
 
 func (s *stack) Pop() interface{} {

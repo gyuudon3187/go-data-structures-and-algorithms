@@ -2,14 +2,14 @@ package queue
 
 import "sync"
 
-type queueItem struct {
+type node struct {
 	item interface{}
-	prev *queueItem
+	prev *node
 }
 
 type queue struct {
-	first *queueItem
-	last  *queueItem
+	first *node
+	last  *node
 	mu    sync.Mutex
 }
 
@@ -22,10 +22,10 @@ func (q *queue) Enqueue(item interface{}) {
 	defer q.mu.Unlock()
 
 	if q.first == nil {
-		q.first = &queueItem{item: item}
+		q.first = &node{item: item}
 		q.last = q.first
 	} else {
-		q.last.prev = &queueItem{item: item}
+		q.last.prev = &node{item: item}
 		q.last = q.last.prev
 	}
 }

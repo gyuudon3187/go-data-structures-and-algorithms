@@ -77,7 +77,7 @@ func TestAppend(t *testing.T) {
 		randomFloat := 0.5
 		c.linkedList.Append(randomFloat)
 		current := c.linkedList.head
-		var lastItem *linkedListItem
+		var lastItem *node
 
 		for current != nil {
 			lastItem = current
@@ -106,7 +106,7 @@ func TestRemoveHead(t *testing.T) {
 		utils.ValidateResult(t, got, want)
 	}))
 
-	t.Run("Sets the head to its prev pointer", testCase(func(t *testing.T, c *testContext) {
+	t.Run("Sets the head to its 'prev' pointer", testCase(func(t *testing.T, c *testContext) {
 		want := c.linkedList.head.prev
 		c.linkedList.RemoveHead()
 		got := c.linkedList.head
@@ -121,7 +121,7 @@ func TestRemoveTail(t *testing.T) {
 		utils.ValidateResult(t, got, want)
 	}))
 
-	t.Run("Sets the prev 'pointer' of the item next to tail to nil", testCase(func(t *testing.T, c *testContext) {
+	t.Run("Sets the 'prev' pointer of the item next to tail to nil", testCase(func(t *testing.T, c *testContext) {
 		nextAfterTail := c.linkedList.head
 
 		for nextAfterTail.prev != c.linkedList.tail {
@@ -131,7 +131,7 @@ func TestRemoveTail(t *testing.T) {
 		c.linkedList.RemoveTail()
 
 		got := nextAfterTail.prev
-		var want *linkedListItem = nil
+		var want *node = nil
 		utils.ValidateResult(t, got, want)
 	}))
 

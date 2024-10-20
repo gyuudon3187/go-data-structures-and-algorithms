@@ -1,20 +1,20 @@
 package linkedlistwithtail
 
-type linkedListItem struct {
+type node struct {
 	item interface{}
-	prev *linkedListItem
+	prev *node
 }
 
 type linkedList struct {
-	head *linkedListItem
-	tail *linkedListItem
+	head *node
+	tail *node
 }
 
 func (l *linkedList) Prepend(item interface{}) {
 	if l.head == nil {
 		l.addFirstItem(item)
 	} else {
-		l.head = &linkedListItem{item: item, prev: l.head}
+		l.head = &node{item: item, prev: l.head}
 	}
 }
 
@@ -22,7 +22,7 @@ func (l *linkedList) Append(item interface{}) {
 	if l.head == nil {
 		l.addFirstItem(item)
 	} else {
-		l.tail.prev = &linkedListItem{item: item, prev: nil}
+		l.tail.prev = &node{item: item, prev: nil}
 		l.tail = l.tail.prev
 	}
 }
@@ -54,7 +54,7 @@ func (l *linkedList) RemoveTail() interface{} {
 	return removed
 }
 
-func (l *linkedList) Find(item interface{}) *linkedListItem {
+func (l *linkedList) Find(item interface{}) *node {
 	current := l.head
 
 	for current != nil {
@@ -69,6 +69,6 @@ func (l *linkedList) Find(item interface{}) *linkedListItem {
 }
 
 func (l *linkedList) addFirstItem(item interface{}) {
-	l.head = &linkedListItem{item: item}
+	l.head = &node{item: item}
 	l.tail = l.head
 }
