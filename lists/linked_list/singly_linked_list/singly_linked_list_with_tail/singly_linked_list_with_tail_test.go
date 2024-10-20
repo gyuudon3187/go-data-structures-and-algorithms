@@ -89,9 +89,16 @@ func TestAppend(t *testing.T) {
 }
 
 func TestRemoveHead(t *testing.T) {
-	t.Run("Removes the head", testCase(func(t *testing.T, c *testContext) {
+	t.Run("Returns the head", testCase(func(t *testing.T, c *testContext) {
 		got := c.linkedList.RemoveHead()
 		want := items[c.itemsLastIndex]
+		utils.ValidateResult(t, got, want)
+	}))
+
+	t.Run("Sets the head to its prev pointer", testCase(func(t *testing.T, c *testContext) {
+		want := c.linkedList.head.prev
+		c.linkedList.RemoveHead()
+		got := c.linkedList.head
 		utils.ValidateResult(t, got, want)
 	}))
 }
