@@ -1,4 +1,4 @@
-package linkedlist
+package linkedlistwithtail
 
 import (
 	utils "github.com/gyuudon3187/go-data-structures-and-algorithms/test_utils"

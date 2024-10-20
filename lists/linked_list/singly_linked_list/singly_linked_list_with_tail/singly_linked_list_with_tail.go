@@ -1,4 +1,4 @@
-package linkedlist
+package linkedlistwithtail
 
 type linkedListItem struct {
 	item interface{}
