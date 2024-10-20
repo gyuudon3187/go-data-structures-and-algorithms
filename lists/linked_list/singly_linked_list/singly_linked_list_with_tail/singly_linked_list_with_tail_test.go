@@ -87,3 +87,11 @@ func TestAppend(t *testing.T) {
 		utils.ValidateResult(t, got, want)
 	}))
 }
+
+func TestRemoveHead(t *testing.T) {
+	t.Run("Removes the head", testCase(func(t *testing.T, c *testContext) {
+		got := c.linkedList.RemoveHead()
+		want := items[c.itemsLastIndex]
+		utils.ValidateResult(t, got, want)
+	}))
+}
