@@ -51,7 +51,6 @@ func TestPrepend(t *testing.T) {
 		if nthLinkedListItem != nil {
 			t.Errorf("Expected nthLinkedListItem to be nil but got %v", nthLinkedListItem)
 		}
-
 	}))
 
 	t.Run("Tail points to the prepended item", testCase(func(t *testing.T, c *testContext) {

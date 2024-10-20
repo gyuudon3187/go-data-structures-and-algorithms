@@ -27,6 +27,16 @@ func (l *linkedList) Append(item interface{}) {
 	}
 }
 
+func (l *linkedList) RemoveHead() interface{} {
+	if l.head != nil {
+		removedHead := l.head.item
+		l.head = l.head.prev
+		return removedHead
+	}
+
+	return nil
+}
+
 func (l *linkedList) addFirstItem(item interface{}) {
 	l.head = &linkedListItem{item: item}
 	l.tail = l.head
