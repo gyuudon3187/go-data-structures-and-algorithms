@@ -37,11 +37,15 @@ func TestPush(t *testing.T) {
 		nthStackItem := c.stack.sp
 		var got, want interface{}
 
-		for i := 0; i < c.itemsLastIndex; i++ {
+		for i := 0; i < len(items); i++ {
 			got = nthStackItem.item
 			want = items[c.itemsLastIndex-i]
 			utils.ValidateResult(t, got, want)
 			nthStackItem = nthStackItem.next
+		}
+
+		if nthStackItem != nil {
+			t.Errorf("Expected nthStackItem to be nil but got %v", nthStackItem)
 		}
 	}))
 }
