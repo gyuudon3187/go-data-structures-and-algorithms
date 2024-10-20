@@ -41,11 +41,15 @@ func TestEnqueue(t *testing.T) {
 		nthQueueItem := c.queue.first
 		var got, want interface{}
 
-		for i := 0; i < c.itemsLastIndex; i++ {
+		for i := 0; i < len(items); i++ {
 			got = nthQueueItem.item
 			want = items[i]
 			utils.ValidateResult(t, got, want)
 			nthQueueItem = nthQueueItem.prev
+		}
+
+		if nthQueueItem != nil {
+			t.Errorf("Expected nthQueueItem to be nil but got %v", nthQueueItem)
 		}
 	}))
 }
