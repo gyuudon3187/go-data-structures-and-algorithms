@@ -1,9 +1,10 @@
 package linkedlistwithtail
 
 import (
+	"fmt"
 	"github.com/google/go-cmp/cmp"
 	utils "github.com/gyuudon3187/go-data-structures-and-algorithms/test_utils"
-	// "slices"
+	"os"
 	"testing"
 )
 
@@ -36,6 +37,15 @@ func testCase(test func(*testing.T, *testContext)) func(*testing.T) {
 		context.beforeEach()
 		test(t, context)
 	}
+}
+
+func TestMain(m *testing.M) {
+	if len(items) < 2 {
+		fmt.Printf("The global variable 'items' must contain at least 2 elements and preferably 3, but its current length is %d.", len(items))
+		os.Exit(1)
+	}
+
+	m.Run()
 }
 
 func TestPrepend(t *testing.T) {
