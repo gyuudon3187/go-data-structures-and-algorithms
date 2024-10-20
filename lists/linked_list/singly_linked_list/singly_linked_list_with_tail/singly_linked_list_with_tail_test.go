@@ -37,7 +37,7 @@ func testCase(test func(*testing.T, *testContext)) func(*testing.T) {
 }
 
 func TestPrepend(t *testing.T) {
-	t.Run("Prepend adds items first-in", testCase(func(t *testing.T, c *testContext) {
+	t.Run("Prepends items", testCase(func(t *testing.T, c *testContext) {
 		nthLinkedListItem := c.linkedList.head
 		var got, want interface{}
 
@@ -54,7 +54,7 @@ func TestPrepend(t *testing.T) {
 
 	}))
 
-	t.Run("Tail points to the item added first by Prepend", testCase(func(t *testing.T, c *testContext) {
+	t.Run("Tail points to the prepended item", testCase(func(t *testing.T, c *testContext) {
 		got := c.linkedList.tail.item
 		want := items[0]
 		utils.ValidateResult(t, got, want)
@@ -62,7 +62,7 @@ func TestPrepend(t *testing.T) {
 }
 
 func TestAppend(t *testing.T) {
-	t.Run("Append adds items last-in", testCase(func(t *testing.T, c *testContext) {
+	t.Run("Appends items", testCase(func(t *testing.T, c *testContext) {
 		randomFloat := 0.5
 		c.linkedList.Append(randomFloat)
 		current := c.linkedList.head
@@ -78,7 +78,7 @@ func TestAppend(t *testing.T) {
 		utils.ValidateResult(t, got, want)
 	}))
 
-	t.Run("Tail points to the item added last by Append", testCase(func(t *testing.T, c *testContext) {
+	t.Run("Tail points to the appended item", testCase(func(t *testing.T, c *testContext) {
 		randomFloat := 0.5
 		c.linkedList.Append(randomFloat)
 
