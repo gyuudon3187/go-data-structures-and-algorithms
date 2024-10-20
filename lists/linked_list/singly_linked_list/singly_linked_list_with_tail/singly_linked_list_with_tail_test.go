@@ -199,3 +199,18 @@ func TestFind(t *testing.T) {
 		}
 	}))
 }
+
+func TestIsEmpty(t *testing.T) {
+	t.Run("True when empty", func(t *testing.T) {
+		linkedList := new(linkedList)
+		got := linkedList.IsEmpty()
+		want := true
+		utils.ValidateResult(t, got, want)
+	})
+
+	t.Run("False when not empty", testCase(func(t *testing.T, tc *testContext) {
+		got := tc.linkedList.IsEmpty()
+		want := false
+		utils.ValidateResult(t, got, want)
+	}))
+}
