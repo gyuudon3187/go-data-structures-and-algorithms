@@ -3,7 +3,7 @@ package linkedlistwithtail
 import (
 	"fmt"
 	"os"
-	"slices"
+	// "slices"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -264,8 +264,8 @@ func TestRemoveItem(t *testing.T) {
 	}))
 
 	t.Run("Removes first item", testCase(func(t *testing.T, tc *testContext) {
-		tc.linkedList.RemoveItem(items[0])
-		got := tc.linkedList.head
+		tc.linkedList.RemoveItem(items[tc.itemsLastIndex])
+		got := tc.linkedList.head.item
 		want := items[tc.itemsLastIndex-1]
 		utils.ValidateResult(t, got, want)
 	}))
@@ -273,12 +273,12 @@ func TestRemoveItem(t *testing.T) {
 	t.Run("Removes intermediate item", testCase(func(t *testing.T, tc *testContext) {
 		tc.linkedList.RemoveItem(items[1])
 		got := tc.linkedList.head.next.item
-		want := items[tc.itemsLastIndex-2]
+		want := items[2]
 		utils.ValidateResult(t, got, want)
 	}))
 
 	t.Run("Removes last item", testCase(func(t *testing.T, tc *testContext) {
-		tc.linkedList.RemoveItem(items[tc.itemsLastIndex])
+		tc.linkedList.RemoveItem(items[0])
 		got := tc.linkedList.tail.item
 		want := items[1]
 		utils.ValidateResult(t, got, want)

@@ -60,9 +60,7 @@ func (l *linkedList) RemoveHead() interface{} {
 		return nil
 	}
 
-	removed := l.head.item
-	l.head = l.head.next
-	l.len--
+	removed := l.removeHeadAndDecrementLength()
 	return removed
 }
 
@@ -98,12 +96,7 @@ func (l *linkedList) RemoveAt(index int) (interface{}, error) {
 	var removed interface{}
 
 	if index == 0 {
-		removed = l.head.item
-		l.head = l.head.next
-		if l.head == nil {
-			l.tail = nil
-		}
-		l.len--
+		removed = l.removeHeadAndDecrementLength()
 		return removed, nil
 	}
 
@@ -115,19 +108,43 @@ func (l *linkedList) RemoveAt(index int) (interface{}, error) {
 	removedNode := beforeRemovedNode.next
 	removed = removedNode.item
 
-	if removedNode.next == nil {
-		l.tail = beforeRemovedNode
-		beforeRemovedNode.next = nil
-	} else {
-		beforeRemovedNode.next = removedNode.next
-	}
+	l.setTailIfNewTailElseRemoveAndDecrement(beforeRemovedNode, removedNode)
 
-	l.len--
 	return removed, nil
 }
 
 func (l *linkedList) RemoveItem(item interface{}) (interface{}, int, error) {
-	return nil, 0, nil
+	l.mu.Lock()
+	defer l.mu.Unlock()
+
+	beforeRemovedNode := l.head
+	if beforeRemovedNode == nil {
+		return nil, -1, fmt.Errorf("Could not remove the following item because the list is empty: %v", item)
+	}
+
+	i := 0
+	var removed interface{}
+
+	if beforeRemovedNode.item == item {
+		removed = l.removeHeadAndDecrementLength()
+		return removed, i, nil
+	}
+
+	for beforeRemovedNode.next != nil {
+		if beforeRemovedNode.next.item == item {
+			removedNode := beforeRemovedNode.next
+			removed = removedNode.item
+
+			l.setTailIfNewTailElseRemoveAndDecrement(beforeRemovedNode, removedNode)
+
+			return removed, i, nil
+		}
+
+		beforeRemovedNode = beforeRemovedNode.next
+		i++
+	}
+
+	return nil, -1, fmt.Errorf("No such item in the list: %v", item)
 }
 
 func (l *linkedList) Find(item interface{}) *node {
@@ -162,6 +179,28 @@ func (l *linkedList) Print() {
 			fmt.Printf(", %v", item)
 		}
 	})
+}
+
+func (l *linkedList) removeHeadAndDecrementLength() interface{} {
+	removed := l.head.item
+	l.head = l.head.next
+	if l.head == nil {
+		l.tail = nil
+	}
+	l.len--
+
+	return removed
+}
+
+func (l *linkedList) setTailIfNewTailElseRemoveAndDecrement(beforeNodeToBeRemoved, nodeToBeRemoved *node) {
+	if nodeToBeRemoved.next == nil {
+		l.tail = beforeNodeToBeRemoved
+		beforeNodeToBeRemoved.next = nil
+	} else {
+		beforeNodeToBeRemoved.next = nodeToBeRemoved.next
+	}
+
+	l.len--
 }
 
 func (l *linkedList) addFirstItem(item interface{}) {
