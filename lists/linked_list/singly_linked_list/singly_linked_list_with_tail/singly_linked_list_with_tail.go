@@ -1,5 +1,7 @@
 package linkedlistwithtail
 
+import "fmt"
+
 type node struct {
 	item interface{}
 	prev *node
@@ -85,6 +87,18 @@ func (l *linkedList) Iterate(action func(interface{})) {
 	for node := l.head; node != nil; node = node.prev {
 		action(node.item)
 	}
+}
+
+func (l *linkedList) Print() {
+	l.Iterate(func(item interface{}) {
+		if l.head.item == item {
+			fmt.Printf("[%v", item)
+		} else if l.tail.item == item {
+			fmt.Printf(", %v]", item)
+		} else {
+			fmt.Printf(", %v", item)
+		}
+	})
 }
 
 func (l *linkedList) addFirstItem(item interface{}) {
