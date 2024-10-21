@@ -119,7 +119,17 @@ func TestRemoveHead(t *testing.T) {
 		utils.ValidateResult(t, got, want)
 	}))
 
-	t.Run("Sets the head to its 'prev' pointer", testCase(func(t *testing.T, tc *testContext) {
+	t.Run("Sets the head to tail when only one item remains after removal", func(t *testing.T) {
+		linkedList := New()
+		linkedList.Prepend("foo")
+		linkedList.Prepend("bar")
+		linkedList.RemoveHead()
+		got := linkedList.head
+		want := linkedList.tail
+		utils.ValidateResult(t, got, want)
+	})
+
+	t.Run("Sets the head to its 'next' pointer", testCase(func(t *testing.T, tc *testContext) {
 		want := tc.linkedList.head.next
 		tc.linkedList.RemoveHead()
 		got := tc.linkedList.head
@@ -149,6 +159,16 @@ func TestRemoveTail(t *testing.T) {
 		want := items[0]
 		utils.ValidateResult(t, got, want)
 	}))
+
+	t.Run("Sets the head to tail when only one item remains after removal", func(t *testing.T) {
+		linkedList := New()
+		linkedList.Prepend("foo")
+		linkedList.Prepend("bar")
+		linkedList.RemoveTail()
+		got := linkedList.head
+		want := linkedList.tail
+		utils.ValidateResult(t, got, want)
+	})
 
 	t.Run("Sets the 'next' pointer of the item before tail to nil", testCase(func(t *testing.T, tc *testContext) {
 		nextAfterTail := tc.linkedList.head
