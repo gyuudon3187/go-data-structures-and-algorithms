@@ -2,10 +2,12 @@ package linkedlistwithtail
 
 import (
 	"fmt"
+	"os"
+	"slices"
+	"testing"
+
 	"github.com/google/go-cmp/cmp"
 	utils "github.com/gyuudon3187/go-data-structures-and-algorithms/test_utils"
-	"os"
-	"testing"
 )
 
 var items = []interface{}{1, "string", 0.4, "another string"}
@@ -255,6 +257,35 @@ func TestRemoveAt(t *testing.T) {
 		if err == nil {
 			t.Error("Expected index exceeding upper bound to throw error but it didn't")
 		}
+	}))
+}
+
+func TestRemoveItem(t *testing.T) {
+	t.Run("Returns removed item", testCase(func(t *testing.T, tc *testContext) {
+		got, _, _ := tc.linkedList.RemoveItem(items[0])
+		want := items[0]
+		utils.ValidateResult(t, got, want)
+	}))
+
+	t.Run("Removes first item", testCase(func(t *testing.T, tc *testContext) {
+		tc.linkedList.RemoveItem(items[0])
+		got := tc.linkedList.head
+		want := items[tc.itemsLastIndex-1]
+		utils.ValidateResult(t, got, want)
+	}))
+
+	t.Run("Removes intermediate item", testCase(func(t *testing.T, tc *testContext) {
+		tc.linkedList.RemoveItem(items[1])
+		got := tc.linkedList.head.next.item
+		want := items[tc.itemsLastIndex-2]
+		utils.ValidateResult(t, got, want)
+	}))
+
+	t.Run("Removes last item", testCase(func(t *testing.T, tc *testContext) {
+		tc.linkedList.RemoveItem(items[tc.itemsLastIndex])
+		got := tc.linkedList.tail.item
+		want := items[1]
+		utils.ValidateResult(t, got, want)
 	}))
 }
 

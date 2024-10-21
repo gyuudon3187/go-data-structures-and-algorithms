@@ -126,6 +126,10 @@ func (l *linkedList) RemoveAt(index int) (interface{}, error) {
 	return removed, nil
 }
 
+func (l *linkedList) RemoveItem(item interface{}) (interface{}, int, error) {
+	return nil, 0, nil
+}
+
 func (l *linkedList) Find(item interface{}) *node {
 	current := l.head
 
