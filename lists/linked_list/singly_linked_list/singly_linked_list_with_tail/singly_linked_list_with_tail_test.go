@@ -214,3 +214,19 @@ func TestIsEmpty(t *testing.T) {
 		utils.ValidateResult(t, got, want)
 	}))
 }
+
+func TestIterate(t *testing.T) {
+	t.Run("Performs given callback: collects each element into slice", testCase(func(t *testing.T, tc *testContext) {
+		got := []interface{}{}
+
+		tc.linkedList.Iterate(func(item interface{}) {
+			got = append([]interface{}{item}, got...)
+		})
+
+		want := items
+
+		if !cmp.Equal(got, want) {
+			t.Errorf("got: %v, want: %v", got, want)
+		}
+	}))
+}

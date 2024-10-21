@@ -81,6 +81,9 @@ func (l *linkedList) Find(item interface{}) *node {
 
 func (l *linkedList) IsEmpty() bool { return l.len == 0 }
 
+func (l *linkedList) Iterate(action func(interface{})) {
+}
+
 func (l *linkedList) addFirstItem(item interface{}) {
 	l.head = &node{item: item}
 	l.tail = l.head
