@@ -150,7 +150,7 @@ func TestRemoveTail(t *testing.T) {
 		utils.ValidateResult(t, got, want)
 	}))
 
-	t.Run("Sets the 'prev' pointer of the item next to tail to nil", testCase(func(t *testing.T, tc *testContext) {
+	t.Run("Sets the 'next' pointer of the item before tail to nil", testCase(func(t *testing.T, tc *testContext) {
 		nextAfterTail := tc.linkedList.head
 
 		for nextAfterTail.next != tc.linkedList.tail {
@@ -164,7 +164,7 @@ func TestRemoveTail(t *testing.T) {
 		utils.ValidateResult(t, got, want)
 	}))
 
-	t.Run("Sets the tail to the item next to old tail", testCase(func(t *testing.T, tc *testContext) {
+	t.Run("Sets the tail to the item before old tail", testCase(func(t *testing.T, tc *testContext) {
 		tc.linkedList.RemoveTail()
 		got := tc.linkedList.tail.item
 		want := items[1]
