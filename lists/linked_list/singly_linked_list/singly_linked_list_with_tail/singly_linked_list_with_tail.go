@@ -82,6 +82,9 @@ func (l *linkedList) Find(item interface{}) *node {
 func (l *linkedList) IsEmpty() bool { return l.len == 0 }
 
 func (l *linkedList) Iterate(action func(interface{})) {
+	for node := l.head; node != nil; node = node.prev {
+		action(node.item)
+	}
 }
 
 func (l *linkedList) addFirstItem(item interface{}) {
