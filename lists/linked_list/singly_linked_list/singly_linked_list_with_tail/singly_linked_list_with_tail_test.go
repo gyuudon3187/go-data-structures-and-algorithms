@@ -12,10 +12,6 @@ import (
 
 var items = []interface{}{1, "string", 0.4, "another string"}
 
-type TestContext interface {
-	beforeEach()
-}
-
 type testContext struct {
 	linkedList     *linkedList
 	itemsLastIndex int
