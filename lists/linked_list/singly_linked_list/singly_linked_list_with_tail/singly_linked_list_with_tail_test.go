@@ -20,7 +20,7 @@ type testContext struct {
 }
 
 func (c *testContext) beforeEach() {
-	l := new(linkedList)
+	l := New()
 
 	for _, item := range items {
 		l.Prepend(item)
@@ -132,6 +132,15 @@ func TestRemoveHead(t *testing.T) {
 		want := len(items) - 1
 		utils.ValidateResult(t, got, want)
 	}))
+
+	t.Run("Does not decrement below 0", func(t *testing.T) {
+		linkedList := New()
+		linkedList.RemoveHead()
+
+		got := linkedList.Length()
+		want := 0
+		utils.ValidateResult(t, got, want)
+	})
 }
 
 func TestRemoveTail(t *testing.T) {
@@ -168,6 +177,15 @@ func TestRemoveTail(t *testing.T) {
 		want := len(items) - 1
 		utils.ValidateResult(t, got, want)
 	}))
+
+	t.Run("Does not decrement below 0", func(t *testing.T) {
+		linkedList := New()
+		linkedList.RemoveTail()
+
+		got := linkedList.Length()
+		want := 0
+		utils.ValidateResult(t, got, want)
+	})
 }
 
 func TestFind(t *testing.T) {

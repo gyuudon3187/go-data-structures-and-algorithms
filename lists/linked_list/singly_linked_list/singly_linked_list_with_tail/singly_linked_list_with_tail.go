@@ -17,6 +17,10 @@ type linkedList struct {
 	mu   sync.Mutex
 }
 
+func New() *linkedList {
+	return new(linkedList)
+}
+
 func (l *linkedList) Length() int {
 	return l.len
 }
