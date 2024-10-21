@@ -57,7 +57,7 @@ func TestPrepend(t *testing.T) {
 			got = nthLinkedListItem.item
 			want = items[tc.itemsLastIndex-i]
 			utils.ValidateResult(t, got, want)
-			nthLinkedListItem = nthLinkedListItem.prev
+			nthLinkedListItem = nthLinkedListItem.next
 		}
 
 		if nthLinkedListItem != nil {
@@ -87,7 +87,7 @@ func TestAppend(t *testing.T) {
 
 		for current != nil {
 			lastItem = current
-			current = current.prev
+			current = current.next
 		}
 
 		got := lastItem.item
@@ -120,7 +120,7 @@ func TestRemoveHead(t *testing.T) {
 	}))
 
 	t.Run("Sets the head to its 'prev' pointer", testCase(func(t *testing.T, tc *testContext) {
-		want := tc.linkedList.head.prev
+		want := tc.linkedList.head.next
 		tc.linkedList.RemoveHead()
 		got := tc.linkedList.head
 		utils.ValidateResult(t, got, want)
@@ -144,13 +144,13 @@ func TestRemoveTail(t *testing.T) {
 	t.Run("Sets the 'prev' pointer of the item next to tail to nil", testCase(func(t *testing.T, tc *testContext) {
 		nextAfterTail := tc.linkedList.head
 
-		for nextAfterTail.prev != tc.linkedList.tail {
-			nextAfterTail = nextAfterTail.prev
+		for nextAfterTail.next != tc.linkedList.tail {
+			nextAfterTail = nextAfterTail.next
 		}
 
 		tc.linkedList.RemoveTail()
 
-		got := nextAfterTail.prev
+		got := nextAfterTail.next
 		var want *node = nil
 		utils.ValidateResult(t, got, want)
 	}))
@@ -191,7 +191,7 @@ func TestFind(t *testing.T) {
 
 		for current != nil {
 			itemsAfterFind = append([]interface{}{current.item}, itemsAfterFind...)
-			current = current.prev
+			current = current.next
 		}
 
 		if !cmp.Equal(items, itemsAfterFind) {

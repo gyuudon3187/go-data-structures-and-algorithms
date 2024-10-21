@@ -1,16 +1,20 @@
 package linkedlistwithtail
 
-import "fmt"
+import (
+	"fmt"
+	"sync"
+)
 
 type node struct {
 	item interface{}
-	prev *node
+	next *node
 }
 
 type linkedList struct {
 	head *node
 	tail *node
 	len  int
+	mu   sync.Mutex
 }
 
 func (l *linkedList) Length() int {
@@ -18,49 +22,61 @@ func (l *linkedList) Length() int {
 }
 
 func (l *linkedList) Prepend(item interface{}) {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+
 	if l.head == nil {
 		l.addFirstItem(item)
 	} else {
-		l.head = &node{item: item, prev: l.head}
+		l.head = &node{item: item, next: l.head}
 	}
 
 	l.len++
 }
 
 func (l *linkedList) Append(item interface{}) {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+
 	if l.head == nil {
 		l.addFirstItem(item)
 	} else {
-		l.tail.prev = &node{item: item, prev: nil}
-		l.tail = l.tail.prev
+		l.tail.next = &node{item: item, next: nil}
+		l.tail = l.tail.next
 	}
 
 	l.len++
 }
 
 func (l *linkedList) RemoveHead() interface{} {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+
 	if l.head == nil {
 		return nil
 	}
 
 	removed := l.head.item
-	l.head = l.head.prev
+	l.head = l.head.next
 	l.len--
 	return removed
 }
 
 func (l *linkedList) RemoveTail() interface{} {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+
 	if l.head == nil {
 		return nil
 	}
 
 	nextAfterTail := l.head
 
-	for nextAfterTail.prev != l.tail {
-		nextAfterTail = nextAfterTail.prev
+	for nextAfterTail.next != l.tail {
+		nextAfterTail = nextAfterTail.next
 	}
 
-	nextAfterTail.prev = nil
+	nextAfterTail.next = nil
 	removed := l.tail.item
 	l.tail = nextAfterTail
 	l.len--
@@ -75,7 +91,7 @@ func (l *linkedList) Find(item interface{}) *node {
 			return current
 		}
 
-		current = current.prev
+		current = current.next
 	}
 
 	return nil
@@ -84,7 +100,7 @@ func (l *linkedList) Find(item interface{}) *node {
 func (l *linkedList) IsEmpty() bool { return l.len == 0 }
 
 func (l *linkedList) Iterate(action func(interface{})) {
-	for node := l.head; node != nil; node = node.prev {
+	for node := l.head; node != nil; node = node.next {
 		action(node.item)
 	}
 }
