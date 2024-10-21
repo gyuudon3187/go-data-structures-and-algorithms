@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-var items = []interface{}{1, "string", 0.4}
+var items = []interface{}{1, "string", 0.4, "another string"}
 
 type TestContext interface {
 	beforeEach()
@@ -40,8 +40,8 @@ func testCase(test func(*testing.T, *testContext)) func(*testing.T) {
 }
 
 func TestMain(m *testing.M) {
-	if len(items) < 2 {
-		fmt.Printf("The global variable 'items' must contain at least 2 elements and preferably 3, but its current length is %d.", len(items))
+	if len(items) < 3 {
+		fmt.Printf("The global variable 'items' must contain at least 3 elements and preferably 4, but its current length is %d.", len(items))
 		os.Exit(1)
 	}
 
@@ -186,6 +186,56 @@ func TestRemoveTail(t *testing.T) {
 		want := 0
 		utils.ValidateResult(t, got, want)
 	})
+}
+
+func TestRemoveAt(t *testing.T) {
+	t.Run("Returns removed element", testCase(func(t *testing.T, tc *testContext) {
+		for i := range items {
+			got, err := tc.linkedList.RemoveAt(0)
+
+			if err != nil {
+				t.Errorf("Could not remove item: %s", err.Error())
+			}
+
+			want := items[tc.itemsLastIndex-i]
+			utils.ValidateResult(t, got, want)
+		}
+	}))
+
+	t.Run("Removes first item", testCase(func(t *testing.T, tc *testContext) {
+		tc.linkedList.RemoveAt(0)
+		got := tc.linkedList.head.item
+		want := items[tc.itemsLastIndex-1]
+		utils.ValidateResult(t, got, want)
+	}))
+
+	t.Run("Removes intermediate item", testCase(func(t *testing.T, tc *testContext) {
+		tc.linkedList.RemoveAt(1)
+		got := tc.linkedList.head.next.item
+		want := items[tc.itemsLastIndex-2]
+		utils.ValidateResult(t, got, want)
+	}))
+
+	t.Run("Removes last item", testCase(func(t *testing.T, tc *testContext) {
+		tc.linkedList.RemoveAt(tc.itemsLastIndex)
+		got := tc.linkedList.tail.item
+		want := items[1]
+		utils.ValidateResult(t, got, want)
+	}))
+
+	t.Run("Throws error when negative bounds", testCase(func(t *testing.T, tc *testContext) {
+		_, err := tc.linkedList.RemoveAt(-1)
+		if err == nil {
+			t.Error("Expected negative bounds to throw error but it didn't")
+		}
+	}))
+
+	t.Run("Throws error when index exceeds upper bound", testCase(func(t *testing.T, tc *testContext) {
+		_, err := tc.linkedList.RemoveAt(tc.itemsLastIndex + 1)
+		if err == nil {
+			t.Error("Expected index exceeding upper bound to throw error but it didn't")
+		}
+	}))
 }
 
 func TestFind(t *testing.T) {

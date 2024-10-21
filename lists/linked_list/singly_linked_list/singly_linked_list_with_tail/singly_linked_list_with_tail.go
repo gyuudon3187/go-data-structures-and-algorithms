@@ -87,6 +87,45 @@ func (l *linkedList) RemoveTail() interface{} {
 	return removed
 }
 
+func (l *linkedList) RemoveAt(index int) (interface{}, error) {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+
+	if index < 0 || index >= l.len {
+		return nil, fmt.Errorf("Index out of bounds: index %d provided but list has length %d", index, l.len)
+	}
+
+	var removed interface{}
+
+	if index == 0 {
+		removed = l.head.item
+		l.head = l.head.next
+		if l.head == nil {
+			l.tail = nil
+		}
+		l.len--
+		return removed, nil
+	}
+
+	beforeRemovedNode := l.head
+	for i := 0; i < index-1; i++ {
+		beforeRemovedNode = beforeRemovedNode.next
+	}
+
+	removedNode := beforeRemovedNode.next
+	removed = removedNode.item
+
+	if removedNode.next == nil {
+		l.tail = beforeRemovedNode
+		beforeRemovedNode.next = nil
+	} else {
+		beforeRemovedNode.next = removedNode.next
+	}
+
+	l.len--
+	return removed, nil
+}
+
 func (l *linkedList) Find(item interface{}) *node {
 	current := l.head
 
