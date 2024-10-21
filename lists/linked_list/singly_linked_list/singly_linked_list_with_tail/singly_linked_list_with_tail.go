@@ -45,7 +45,7 @@ func (l *linkedList) Append(item interface{}) {
 	if l.head == nil {
 		l.addFirstItem(item)
 	} else {
-		l.tail.next = &node{item: item, next: nil}
+		l.tail.next = &node{item: item}
 		l.tail = l.tail.next
 	}
 
@@ -74,15 +74,15 @@ func (l *linkedList) RemoveTail() interface{} {
 		return nil
 	}
 
-	nextAfterTail := l.head
+	beforeTail := l.head
 
-	for nextAfterTail.next != l.tail {
-		nextAfterTail = nextAfterTail.next
+	for beforeTail.next != l.tail {
+		beforeTail = beforeTail.next
 	}
 
-	nextAfterTail.next = nil
+	beforeTail.next = nil
 	removed := l.tail.item
-	l.tail = nextAfterTail
+	l.tail = beforeTail
 	l.len--
 	return removed
 }
